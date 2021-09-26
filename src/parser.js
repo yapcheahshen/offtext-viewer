@@ -1,6 +1,40 @@
 const QUOTEPREFIX='\u001a'
 const QUOTEPAT=/\u001a(\d+)/g
+export const OFFTAG_REGEX_G=/\^([A-Za-z_]+[#\.~A-Za-z_\-\d]*)(\[(?:\\.|.)*?\])?/g
+export const QSTRING_REGEX_G= /"((?:\\.|.)*?)"/g
+/*
+verse  <l></l>
+dictionary
+   entry
+      form
+      pron 發音
+      syll syllabification
+      gram grammar
+      gen gender
+      pos part of speech
+      hom
+      sense
+      def
+      usg
+      xr
+      etym
+      re 相關 
+      note
 
+      ptr
+
+app
+   rdg wit=  
+   lem
+
+   ^ap[ wit1=x wit2=y lemma]
+
+proper name
+
+footnote
+
+inline note
+*/
 const parseCompactAttr=str=>{
     const arr=str.split(/([#~])/);
     const out={};
@@ -18,8 +52,9 @@ const parseCompactAttr=str=>{
 }
 export default function parse(str){
     const tags=[];
-    let tagslen=0,textlength=0,prevoff=0;
-    let text=str.replace(/\^([A-Za-z_]+[#\.~A-Za-z_\d]*)(\[(?:\\.|.)*?\])?/g,(m,rawT,rawA,offset)=>{
+    let textlength=0,prevoff=0;
+    let text=str.replace(OFFTAG_REGEX_G,
+    (m,rawT,rawA,offset)=>{
         let putback='';
         let [m2, tagName, compactAttr]=rawT.match(/([A-Za-z_]*)(.*)/);
 
@@ -28,7 +63,7 @@ export default function parse(str){
             return (withq?'"':'')+quotes[parseInt(qc)]+(withq?'"':'');
         });
 
-        let raw=rawA?rawA.substr(1,rawA.length-2).replace(/"((?:\\.|.)*?)"/g,(m,m1)=>{
+        let raw=rawA?rawA.substr(1,rawA.length-2).replace(QSTRING_REGEX_G,(m,m1)=>{
             quotes.push(m1);
             return QUOTEPREFIX+(quotes.length-1);
         }):'';
@@ -58,15 +93,19 @@ export default function parse(str){
         }
 
         putback=putback.trimRight(); //remove tailing blank
+        if (tagName=='br' && !putback) { //put a blank space infront, for English
+            putback=' ';
+            offset++
+        }
         textlength+= offset-prevoff;
-        
+
         const W=attrs['~'];
         if (W && !isNaN(parseInt(W))) {
             width=parseInt(W);
             delete attrs['~'];
         }
         
-        if (putback.length&&width) console.log('override width setting');
+        // if (putback.length&&width) console.log('override width setting');
 
         width=putback.length?putback.length:width;
         if (!width && (offset==0 || str[offset-1]=='\n')) {
@@ -74,8 +113,9 @@ export default function parse(str){
         }
         tags.push( [tagName, attrs, textlength, width]);
         textlength+=putback.length - m.length;
-        tagslen+=m.length;
         prevoff=offset;
+    
+
         return putback;
     })
 

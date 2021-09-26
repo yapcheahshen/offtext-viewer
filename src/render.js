@@ -8,11 +8,13 @@ const toHtmlTag=(content,tags)=>{
         while (ntag<tags.length && tag) {
             const [name, attrs, tagoffset, width] = tag;
             if (tagoffset> offset+line.length) break; //tag not in this line
-            T.push( [tagoffset,,name,attrs] );         //open tag
+            const bol=(tagoffset==offset) && (width==-1 || width==0);
+            T.push( [tagoffset,,name,attrs,bol] );         //open tag
             tagcount++;
             //decide where to close tag
-            if (width==-1) {
-                T.push([ offset+line.length , tagcount ]); //close at end of this line
+            if (width<0) {
+                const dist=line.length - (-width-1);
+                T.push([ offset+ (dist>0?dist:0) , tagcount ]); // 從行末倒數
             } else if (width>0) {
                 T.push([ tagoffset+width, tagcount ]); // close after n characters
             } else if (attrs['~']) {
@@ -22,7 +24,7 @@ const toHtmlTag=(content,tags)=>{
                 if (pos>-1) {
                     T.push([offset+pos+W.length, tagcount ]);
                 } else {
-                    console.log('not found',W,tag);
+                    T.push([tagoffset, tagcount ]);
                 }
             } else {                                 
                 T.push([tagoffset, tagcount]);            //close right after
@@ -40,16 +42,31 @@ const toHtmlTag=(content,tags)=>{
     })
     return T;
 }
-
+const htmlAttrs=attrs=>{
+    let s='';
+    for (let name in attrs) {
+        let aname=name;
+        if (name=='#') aname='id';
+        if (name=='~') continue;
+        s+=' '+aname+'="'+attrs[name]+'"';
+    }
+    return s;
+}
 export default function render(content,tags,opts={}){
     const T=toHtmlTag(content,tags);
     let output='';
     let activecls=[];//active classes
     let prev=0,tagcount=0;
     for(let i=0;i<T.length;i++) {
-        const [offset,closing,cls,attrs] = T[i];
+        const [offset,closing,cls,attrs,bol] = T[i];
+        if (cls=='br'||cls=='r') {
+            tagcount++;
+            output+=content.substring(prev, offset)+'<br i='+tagcount+htmlAttrs(attrs)+'>';
+            prev=offset;
+            continue;
+        }
         if (closing) {
-            output+=content.substring(prev, offset) +'</t i='+closing+'>';
+            output+=content.substring(prev, offset) +'</t '+closing+'>';
             activecls=activecls.filter( c=>c[0]!==closing); 
             if (activecls.length) {
                 output+='<t class="'+activecls.map(c=>c[1]).join(" ")+'">';
@@ -62,13 +79,15 @@ export default function render(content,tags,opts={}){
                 clss=clss.concat(activecls.map(c=>c[1]));
             }
             tagcount++;
-            output+='<t i='+tagcount+' class="'+clss.join(' ')+'">';
-            activecls.push([tagcount,cls]);
+            output+='<t i='+tagcount+' class="'+clss.join(' ')+'"'+htmlAttrs(attrs)+'>';
+            
+            //do not repeat per-paragraph styling
+            if (!bol) activecls.push([tagcount,cls]);
         }
         prev=offset;
     }
     output+=content.substr(prev);
-    if (opts.autop) {
-        return '<p>'+output.replace(/\n{2,}/,'</p><p>')+'</p>';
+    if (opts.p) {
+        return '<p>'+output.replace(/\n{2,}/,'</p><p\n>')+'</p>';
     } else return output;
 }
