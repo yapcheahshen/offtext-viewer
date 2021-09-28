@@ -1,14 +1,13 @@
 <script>
-import { text } from 'svelte/internal';
 import Editor from './editor.svelte';
-import parse from './parser.js'
+import {parseOfftext} from 'pitaka/format'
 import render from './render.js'
 import {editingtext} from './store.js';
 let htmloutput='',tagsoutput='';
 
 let res={text:'',tags:[]};
 $:  {
-	res = parse($editingtext); 
+	res = parseOfftext($editingtext); 
 	htmloutput= render(res.text,res.tags);
 }
 
@@ -27,7 +26,9 @@ $:  {
 </div>
 <style>
 	:global(.book){
-		color:blue
+		font-size:1.5em;
+		color:brown;
+		font-family: 楷体,標楷體;
 	}
 
 	:global(.li::before) { 

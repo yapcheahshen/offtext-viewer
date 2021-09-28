@@ -1,3 +1,5 @@
+import {TNAME,TPOS,TATTR,TWIDTH,TLINE} from 'pitaka/format';
+
 const toHtmlTag=(content,tags)=>{
     const T=[];
     const lines=content.split(/\r?\n/);
@@ -6,29 +8,13 @@ const toHtmlTag=(content,tags)=>{
     for (let i=0;i<lines.length;i++) {
         const line=lines[i];
         while (ntag<tags.length && tag) {
-            const [name, attrs, tagoffset, width] = tag;
-            if (tagoffset> offset+line.length) break; //tag not in this line
-            const bol=(tagoffset==offset) && (width==-1 || width==0);
-            T.push( [tagoffset,,name,attrs,bol] );         //open tag
+            let w=tag[TWIDTH];
+            if (tag[TLINE]!==i) break;           //tag beyond in this line
+            const bol=(tag[TPOS]==offset) && (w==-1 || w==0);  
+            T.push( [offset+tag[TPOS],,tag[TNAME], tag[TATTR],bol] );  //open tag
             tagcount++;
-            //decide where to close tag
-            if (width<0) {
-                const dist=line.length - (-width-1);
-                T.push([ offset+ (dist>0?dist:0) , tagcount ]); // 從行末倒數
-            } else if (width>0) {
-                T.push([ tagoffset+width, tagcount ]); // close after n characters
-            } else if (attrs['~']) {
-                const W=attrs['~'];                    //close after a string
-                const cur=tagoffset-offset;
-                const pos=line.indexOf(W,cur);
-                if (pos>-1) {
-                    T.push([offset+pos+W.length, tagcount ]);
-                } else {
-                    T.push([tagoffset, tagcount ]);
-                }
-            } else {                                 
-                T.push([tagoffset, tagcount]);            //close right after
-            }
+            if (w==-1) w=line.length; // 從行末倒數
+            T.push([ offset+tag[TPOS]+w, tagcount ]); // close after n characters
             ntag++;
             tag=tags[ntag];
         }

@@ -61,9 +61,7 @@ onMount(()=>{
 
 <div style="height: 200px;">
 <textarea id="editing" spellcheck="false" on:input={oninput} on:scroll={sync_scroll} on:keydown={check_tab}>{$editingtext}</textarea>
-<pre id="highlighting" aria-hidden="true">
-<code class="language-html" id="highlighting-content">{@html output}</code>
-</pre>
+<pre id="highlighting" aria-hidden="true"><code class="language-html" id="highlighting-content">{@html output}</code></pre>
 </div>
 
 <style>
@@ -82,6 +80,10 @@ onMount(()=>{
   }
   :global(.offtag-val) {
     color:firebrick
+  }
+  :global(.offtag-putback) {
+    background:white;
+    color:black;
   }
   :global(.offtag-attr) {
     color:olive
