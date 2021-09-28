@@ -10,11 +10,13 @@ const toHtmlTag=(content,tags)=>{
         while (ntag<tags.length && tag) {
             let w=tag[TWIDTH];
             if (tag[TLINE]!==i) break;           //tag beyond in this line
-            const bol=(tag[TPOS]==offset) && (w==-1 || w==0);  
+            const bol=(tag[TPOS]==0) && (w==-1 || w==0);  
             T.push( [offset+tag[TPOS],,tag[TNAME], tag[TATTR],bol] );  //open tag
             tagcount++;
             if (w==-1) w=line.length; // 從行末倒數
-            T.push([ offset+tag[TPOS]+w, tagcount ]); // close after n characters
+            if (tag[TNAME]!=='r' && tag[TNAME]!=='br') {
+                T.push([ offset+tag[TPOS]+w, tagcount ,bol]); // close after n characters
+            }
             ntag++;
             tag=tags[ntag];
         }
@@ -68,7 +70,9 @@ export default function render(content,tags,opts={}){
             output+='<t i='+tagcount+' class="'+clss.join(' ')+'"'+htmlAttrs(attrs)+'>';
             
             //do not repeat per-paragraph styling
-            if (!bol) activecls.push([tagcount,cls]);
+            if (!bol) {
+                activecls.push([tagcount,cls]);
+            }
         }
         prev=offset;
     }
