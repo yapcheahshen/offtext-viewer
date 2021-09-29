@@ -66,32 +66,5 @@ onMount(()=>{
 
 <style>
 
-  :global(.offtag-op) {
-    /* color:rgba(0,0,0,0.3); */
-    color:burlywood;
-  }
-  :global(.offtag-name) {
-    background:burlywood;
-    border-top-left-radius: 5px;
-    border-bottom-left-radius: 5px;
-  }
-  :global(.offtag-bracket) {
-    color:burlywood;
-  }
-  :global(.offtag-val) {
-    color:firebrick
-  }
-  :global(.offtag-putback) {
-    background:white;
-    color:black;
-  }
-  :global(.offtag-attr) {
-    color:olive
-  }
-  :global(.offtag-attributes) {
-    background:wheat
-  }
-  :global(.offtag-blank) {
-    border-bottom:1px solid burlywood;
-  }
+ 
 </style>

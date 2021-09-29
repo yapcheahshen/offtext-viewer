@@ -1,0 +1,122 @@
+
+.offtag-op {
+    /* color:rgba(0,0,0,0.3); */
+    color:burlywood;
+  }
+.offtag-name {
+    background:burlywood;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+  }
+.offtag-bracket {
+    color:burlywood;
+  }
+.offtag-val {
+    color:firebrick
+  }
+.offtag-putback {
+    background:white;
+    color:black;
+  }
+.offtag-attr {
+    color:olive
+  }
+.offtag-attributes {
+    background:wheat
+  }
+.offtag-blank {
+    border-bottom:1px solid burlywood;
+}
+
+
+t.fn.highlight:after{
+    background-color: rgb(255, 150, 150,0.5);
+}
+t.fn[i]:after{
+    position: absolute;
+    cursor: pointer;
+    margin-top:-1.0em;
+    margin-left:-1em;
+    font-size:0.6rem;
+    font-weight: bold;
+    color:gray;
+    font-family: monospace; 
+    padding:2px; content:attr(n)
+}
+t.fn[i]:hover {border-bottom:double}
+t.fn[i]:hover:after {
+    color:brown;
+    content: attr(n) "↓"; 
+    transition: color 1s;
+}
+
+t.pb:before {
+    position: absolute;
+    cursor: pointer;
+    margin-top:1.5em;
+    margin-left:-1em;
+    font-size:0.6rem;
+    font-weight: bold;
+    color:brown;
+    font-family: monospace; 
+    padding:2px; content:"[" attr(n) "]"
+}
+
+
+t.w[pli] {
+    cursor:pointer;
+    position:relative; /* making the .tooltip span a container for the tooltip text */
+    border-bottom:1px dashed #000; /* little indicater to indicate it's hoverable */
+  }
+t.w[pli]:hover:before {
+    display:block;
+}
+t.w[pli]:hover {background-color:lightgoldenrodyellow;}
+
+t.w[pli]:before {
+    content: attr(pli); /* here's the magic */
+    position:absolute;
+    top:4rem;
+    transform:translateY(-50%);
+    left:0%;
+    padding-left:10px;padding-right:10px;
+    border-radius:10px;
+    background:#000;
+    color: lightgoldenrodyellow;
+    text-align:center;
+    z-index: 99;
+    display:none; /* hide by default */
+}
+
+
+t.book{
+    font-size:1.2em;
+    color:brown;
+    font-family: 楷体,標楷體;
+}
+t.book-:before {
+    content:"《";
+    color:red;
+}
+t.-book:after{
+    content:"》";
+    color:red;
+}
+
+t.li-::before {  /* [i] means only put on real position */
+    background:linear-gradient(red,blue);
+    display:inline-block;
+    content:"";
+    border-radius: 0.5em;
+    margin-right:0.5em;
+    height:1em;
+    width:1em;
+}
+t.g {
+    color:brown
+}
+
+t.b {font-weight: bold	}
+t.i {font-style: italic	}
+t.u {text-decoration:underline}
+t.red {color:red}

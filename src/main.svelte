@@ -1,6 +1,6 @@
 <script>
 import Editor from './editor.svelte';
-import {parseOfftext} from 'pitaka/format'
+import {parseOfftext} from 'pitaka/offtext'
 import render from './render.js'
 import {editingtext} from './store.js';
 let htmloutput='',tagsoutput='';
@@ -25,29 +25,7 @@ $:  {
 
 </div>
 <style>
-	:global(.book){
-		font-size:1.5em;
-		color:brown;
-		font-family: 楷体,標楷體;
-	}
 
-	:global(.li::before) { 
-		background:linear-gradient(red,blue);
-		display:inline-block;
-		content:"";
-		border-radius: 0.5em;
-		margin-right:0.5em;
-		height:1em;
-		width:1em;
-	}
-	:global(.g) {
-		color:brown
-	}
-
-	:global(.b) {font-weight: bold	}
-	:global(.i) {font-style: italic	}
-	:global(.u) {text-decoration:underline}
-	:global(.red) {color:red}
 	
 	.main {display:flex;flex-direction:row;width:100vw;}
 	.left {width:50%;overflow-y:none;}

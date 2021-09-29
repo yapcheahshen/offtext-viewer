@@ -1,4 +1,4 @@
-import {OFFTAG_REGEX_G,QSTRING_REGEX_G} from 'pitaka/format'
+import {OFFTAG_REGEX_G,QSTRING_REGEX_G} from 'pitaka/offtext'
 export default function (s){
     return s.replace(OFFTAG_REGEX_G,(m,cls,rawattr)=>{
         let html='';
