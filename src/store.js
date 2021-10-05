@@ -12,6 +12,6 @@ const daode=`^book道德經
 
 const overlap=`^b[~聾]五色令人^u目盲；^red[~味]五音令人耳聾；五^i[味令人]口爽；`
 const listitem=`^li五色令人目盲；^b[五音]令人^r耳聾；^li五味令人口爽`
-const footnotes=`^book同出^u而異^w[pli=nama 名]，同謂之^fn4玄。玄之^pb100又玄，^fn2[眾妙]之門`
+const footnotes=`^book同出^u[~門]而異^w[pli=nama 名]，同^br謂之^fn4玄。玄之^pb100又玄，^fn2[眾妙]之門`
 export const editingtext=writable(footnotes);
 

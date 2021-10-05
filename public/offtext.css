@@ -10,7 +10,8 @@
   }
 .offtag-bracket {
     color:burlywood;
-  }
+
+}
 .offtag-val {
     color:firebrick
   }
@@ -22,7 +23,9 @@
     color:olive
   }
 .offtag-attributes {
-    background:wheat
+    background:wheat;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
   }
 .offtag-blank {
     border-bottom:1px solid burlywood;
@@ -66,7 +69,7 @@ t.pb:before {
 t.w[pli] {
     cursor:pointer;
     position:relative; /* making the .tooltip span a container for the tooltip text */
-    border-bottom:1px dashed #000; /* little indicater to indicate it's hoverable */
+    border-bottom:2px dotted #000; /* little indicater to indicate it's hoverable */
   }
 t.w[pli]:hover:before {
     display:block;
@@ -90,7 +93,7 @@ t.w[pli]:before {
 
 
 t.book{
-    font-size:1.2em;
+    font-size:1.1em;
     color:brown;
     font-family: 楷体,標楷體;
 }

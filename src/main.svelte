@@ -1,14 +1,14 @@
 <script>
 import Editor from './editor.svelte';
 import {parseOfftext} from 'pitaka/offtext'
-import render from './render.js'
+import {renderHTML} from 'pitaka/offtext'
 import {editingtext} from './store.js';
 let htmloutput='',tagsoutput='';
 
 let res={text:'',tags:[]};
 $:  {
 	res = parseOfftext($editingtext); 
-	htmloutput= render(res.text,res.tags);
+	htmloutput= renderHTML(res.text,res.tags);
 }
 
 </script>

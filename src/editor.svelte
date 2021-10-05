@@ -1,8 +1,8 @@
 <script>
   /*https://css-tricks.com/creating-an-editable-textarea-that-supports-syntax-highlighted-code/ */
-import { onMount } from "svelte";
-import {editingtext} from "./store.js"
-import render from './render.js'
+import { onMount } from 'svelte';
+import {editingtext} from './store.js'
+
 import highlight from './highlighter.js'
 
 let output='';
